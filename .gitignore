@@ -134,3 +134,9 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# The two project clones are separate repositories (see README.txt)
+work/
+
+# Rendered intermediate
+report/*.html

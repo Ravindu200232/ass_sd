@@ -1,0 +1,4 @@
+
+> pubudu-pos-front-end@0.0.0 lint:security
+> eslint --config eslint.security.config.js .
+

@@ -1,0 +1,109 @@
+
+========================================================================
+ SE4030 - Vulnerability proof-of-concept suite  [BEFORE - original application, tag v0-original-vulnerable]
+ target: http://127.0.0.1:8000/api
+========================================================================
+
+  admin token   : acquired
+  cashier token : acquired
+
+ VULNERABLE  V-01  Unauthenticated registration grants an administrator token
+             OWASP A01:2021 Broken Access Control | CWE-862 Missing Authorization | CVSS 9.8
+             POST http://127.0.0.1:8000/api/register  (no Authorization header)
+               body contained "role":"admin"
+               -> HTTP 201, role granted = admin
+               token works: GET /all-users -> 200, 5 user records returned
+
+ VULNERABLE  V-02  Administrator-only operations are reachable by any employee
+             OWASP A01:2021 Broken Access Control | API5:2023 BFLA | CWE-285 Improper Authorization
+             authenticated as a CASHIER (role=employee); not one of these was refused:
+               GET /reports/daily-profit -> 200  (read company-wide profit and margin)
+               GET /reports/customers -> 200  (export the full customer list)
+               POST /customers/1/adjust-credit -> 500  (zero a customer's outstanding debt)
+               POST /grn-items/update-selling-price -> 200  (reprice stock)
+
+ VULNERABLE  V-03  Employee reads another branch's customers and invoices (IDOR / BOLA)
+             OWASP A01:2021 | API1:2023 BOLA | CWE-639 Authorization Bypass Through User-Controlled Key
+             authenticated as the COLOMBO cashier (department_id=1)
+               GET /customers/2  -> 200  leaked: "Dilani Wickramasinghe", credit balance 78500.00
+               GET /invoices/2   -> 200  leaked: Kandy branch invoice INV0002
+               both records belong to department_id=2 (Kandy)
+
+ VULNERABLE  V-04  Mass assignment erases customer debt and rewrites the business key
+             OWASP A08:2021 | API6:2023 | CWE-915 Improperly Controlled Modification of Attributes
+             (a) PUT /customers/1  {"credit_balance":0}  -> 200
+                   credit_balance: 45000 -> 0  *** 45 000 LKR of debt erased ***
+                   credit_transactions rows afterwards: 0   <- no audit trail of the write-off
+             (b) PUT /customers/3  {"customer_code":"CUS-HIJACKED"}  -> 200
+                   customer_code : CUS0003 -> CUS-HIJACKED  *** business key rewritten ***
+                   invoices and credit_transactions join on customer_code, so rewriting it
+                   re-points a customer at another customer's financial history
+               neither field appears in the controller validation rules; both reach the
+               model through $request->all() at CustomerController.php:148
+
+ VULNERABLE  V-05a  Login responses reveal whether a username exists
+             OWASP A07:2021 Identification and Authentication Failures | CWE-204 Observable Response Discrepancy
+             unknown username -> HTTP 404  "The provided username does not exist."
+             known username, wrong password -> HTTP 401  "The provided password is incorrect."
+               the two responses differ, so valid usernames can be harvested before any password guessing
+
+ VULNERABLE  V-05b  Password guessing is not rate limited per account
+             OWASP A07:2021 | CWE-307 Improper Restriction of Excessive Authentication Attempts
+             20 consecutive failed logins for user "admin" from one IP
+               processed without throttling: 20
+               rejected with HTTP 429      : 0
+               never throttled - offline-speed password spraying is possible
+
+ VULNERABLE  V-05c  Password policy accepts "123456"
+             OWASP A07:2021 | CWE-521 Weak Password Requirements
+             POST /register with password "123456" -> 201
+               accepted. Rule is min:6 with no complexity and no breach check,
+               so the most-guessed password in the world is a valid staff credential.
+
+ VULNERABLE  V-06  Tokens survive account deactivation and never expire
+             OWASP A07:2021 | CWE-613 Insufficient Session Expiration | CWE-672 Operation on Expired Resource
+             employee logs in            -> token issued, GET /me 200
+             admin sets is_active=false  -> PUT /users/4 200
+             fresh login now refused     -> POST /login 403
+             EXISTING token replayed     -> GET /me 200  *** still authorised after termination ***
+               config/sanctum.php sets expiration => null, so that token is valid forever
+
+ VULNERABLE  V-07  Server returns internal exception detail to the client
+             OWASP A05:2021 Security Misconfiguration | CWE-209 Generation of Error Message Containing Sensitive Information
+             responses exposed internal implementation detail:
+               GET /reports/carts    -> 500  { "message": "Class \"App\\Models\\Cart\" not found", "exception": "Error", "file": "D:\\ass_sd\\work\\pubudu-pos-api-secure\\app\\Http\\Controllers\\Api\\ReportController.php", "l
+
+ VULNERABLE  V-08  CORS policy accepts every origin
+             OWASP A05:2021 | CWE-942 Permissive Cross-domain Policy
+             request sent with Origin: https://attacker.example.com
+               Access-Control-Allow-Origin      : *
+               Access-Control-Allow-Credentials : (absent)
+               any website on the internet may script this API from a victim browser
+
+ VULNERABLE  V-09  Security response headers are absent
+             OWASP A05:2021 | CWE-693 Protection Mechanism Failure
+             headers on an authenticated API response:
+               [MISSING] x-content-type-options
+               [MISSING] x-frame-options
+               [MISSING] referrer-policy
+               [MISSING] content-security-policy
+               [MISSING] strict-transport-security
+
+ VULNERABLE  V-10  Cashier sets the selling price, bypassing the discount-approval workflow
+             OWASP A04:2021 Insecure Design | CWE-602 Client-Side Enforcement of Server-Side Security
+             POST /invoices -> 201  created INV0003
+               catalogue price (grn_items.selling_price) : 32000 LKR
+               price submitted by the cashier            : 1 LKR
+               net_total persisted by the server         : 1
+               *** the server stored the attacker-supplied price verbatim ***
+               the DiscountRequest approval workflow is therefore decorative:
+               any discount can be taken by simply lowering selling_price
+
+========================================================================
+ SUMMARY
+========================================================================
+  Still exploitable : 12  V-01 V-02 V-03 V-04 V-05a V-05b V-05c V-06 V-07 V-08 V-09 V-10
+  Fixed             : 0  
+========================================================================
+  target: http://127.0.0.1:8000/api
+  run at: 2026-09-20T03:56:49.401Z

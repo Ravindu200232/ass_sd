@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "pubudu-pos-frontend",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "D:/ass_sd/work/pubudu-pos-front-end-secure", "run", "dev"],
+      "port": 5173
+    }
+  ]
+}

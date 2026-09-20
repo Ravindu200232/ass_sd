@@ -1,0 +1,92 @@
+
+  [30;43;1m WARN [39;49;22m Metadata found in doc-comment for method Tests\Feature\Security\AccessControlTest::test_privileged_endpoints_refuse_an_employee(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+  [30;43;1m WARN [39;49;22m Metadata found in doc-comment for method Tests\Feature\Security\AuthenticationTest::test_weak_passwords_are_rejected(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+  [30;43;1m WARN [39;49;22m Metadata found in doc-comment for method Tests\Feature\Security\ConfigurationTest::test_security_headers_are_present(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Security\AccessControlTest[39m
+  [32;1m✓[39;22m[90m [39m[90mregistration is not reachable without authentication[39m[90m                                                        [39m [90m4.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90man employee cannot create users[39m[90m                                                                             [39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mregistration no longer returns a session token[39m[90m                                                              [39m [90m0.64s[39m  
+  [32;1m✓[39;22m[90m [39m[90mprivileged endpoints refuse an employee with data set "company profit report"[39m[90m                               [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mprivileged endpoints refuse an employee with data set "customer export"[39m[90m                                     [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mprivileged endpoints refuse an employee with data set "invoice report"[39m[90m                                      [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mprivileged endpoints refuse an employee with data set "audit trail"[39m[90m                                         [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mprivileged endpoints refuse an employee with data set "list all users"[39m[90m                                      [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mprivileged endpoints refuse an employee with data set "reprice a stock batch"[39m[90m                               [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mprivileged endpoints refuse an employee with data set "adjust a credit balance"[39m[90m                             [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mprivileged endpoints refuse an employee with data set "adjust stock quantity"[39m[90m                               [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mprivileged endpoints refuse an employee with data set "cancel an invoice"[39m[90m                                   [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mprivileged endpoints refuse an employee with data set "delete a customer"[39m[90m                                   [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mprivileged endpoints refuse an employee with data set "create a product"[39m[90m                                    [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90man administrator can reach the same endpoints[39m[90m                                                               [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdiscount approval is administrator only[39m[90m                                                                     [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90man employee cannot read another branchs customer[39m[90m                                                            [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90man employee cannot read another branchs invoice[39m[90m                                                             [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90man employee can read their own branchs records[39m[90m                                                              [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90man administrator sees every branch[39m[90m                                                                          [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mlisting endpoints are scoped too[39m[90m                                                                            [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90man employee with no department sees nothing[39m[90m                                                                 [39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Security\AuthenticationTest[39m
+  [32;1m✓[39;22m[90m [39m[90man unknown username and a wrong password are indistinguishable[39m[90m                                              [39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90ma failed login is recorded in the audit trail[39m[90m                                                               [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe submitted password is never written to the audit trail[39m[90m                                                  [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mrepeated failed logins are throttled[39m[90m                                                                        [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mweak passwords are rejected with data set "the most guessed password in the world"[39m[90m                          [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mweak passwords are rejected with data set "too short"[39m[90m                                                       [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mweak passwords are rejected with data set "no digits"[39m[90m                                                       [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mweak passwords are rejected with data set "no symbols"[39m[90m                                                      [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mweak passwords are rejected with data set "no upper case"[39m[90m                                                   [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mweak passwords are rejected with data set "known breached"[39m[90m                                                  [39m [90m0.73s[39m  
+  [32;1m✓[39;22m[90m [39m[90ma strong password is accepted[39m[90m                                                                               [39m [90m0.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mchanging a password requires the current one[39m[90m                                                                [39m [90m0.45s[39m  
+  [32;1m✓[39;22m[90m [39m[90ma successful password change revokes every session[39m[90m                                                          [39m [90m0.50s[39m  
+  [32;1m✓[39;22m[90m [39m[90missued tokens carry an expiry[39m[90m                                                                               [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mtokens are scoped to the users role[39m[90m                                                                         [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mlogging in revokes previous sessions[39m[90m                                                                        [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdeactivating a user revokes their existing token[39m[90m                                                            [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90ma deactivated user is refused on every request[39m[90m                                                              [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mchanging a role revokes the old token[39m[90m                                                                       [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mlogout all revokes every session[39m[90m                                                                            [39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Security\BusinessIntegrityTest[39m
+  [32;1m✓[39;22m[90m [39m[90ma credit balance cannot be changed through the update endpoint[39m[90m                                              [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe customer business key cannot be rewritten[39m[90m                                                               [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe business key is not mass assignable at the model level either[39m[90m                                           [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90ma credit adjustment writes a ledger row[39m[90m                                                                     [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90ma tampered unit price is rejected[39m[90m                                                                           [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe catalogue price is accepted[39m[90m                                                                             [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90ma discount with no approval is rejected[39m[90m                                                                     [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90man approved discount is accepted and consumed[39m[90m                                                               [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90man approved discount cannot be replayed[39m[90m                                                                     [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90ma discount larger than the approved amount is rejected[39m[90m                                                      [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mone cashier cannot spend another cashiers approval[39m[90m                                                          [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe creating user is taken from the token not the payload[39m[90m                                                   [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcancelling an invoice preserves the original amounts[39m[90m                                                        [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe audit trail cannot be modified[39m[90m                                                                          [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe audit trail cannot be deleted[39m[90m                                                                           [39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Security\ConfigurationTest[39m
+  [32;1m✓[39;22m[90m [39m[90msecurity headers are present with data set "nosniff"[39m[90m                                                        [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90msecurity headers are present with data set "framing"[39m[90m                                                        [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90msecurity headers are present with data set "referrer"[39m[90m                                                       [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90ma content security policy is sent[39m[90m                                                                           [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mheaders are present on error responses too[39m[90m                                                                  [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mhsts is not sent over plain http[39m[90m                                                                            [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90man unknown origin is not granted cors access[39m[90m                                                                [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe configured frontend origin is allowed[39m[90m                                                                   [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcredentials are never allowed cross origin[39m[90m                                                                  [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90man unhandled error does not leak internals[39m[90m                                                                  [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90ma missing record does not reveal the model class[39m[90m                                                            [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe shipped env template is production safe[39m[90m                                                                 [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe application defaults to debug off when unset[39m[90m                                                            [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe authorize url uses authorization code with pkce[39m[90m                                                         [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe pkce verifier is never sent to the client[39m[90m                                                               [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90ma callback with an unknown state is refused[39m[90m                                                                 [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90ma state value cannot be replayed[39m[90m                                                                            [39m [90m0.54s[39m  
+
+  [90mTests:[39m    [32;1m74 passed[39;22m[90m (144 assertions)[39m
+  [90mDuration:[39m [39m12.83s[39m
+
