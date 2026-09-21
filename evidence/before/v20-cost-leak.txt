@@ -1,0 +1,14 @@
+ VULNERABLE  V-20  Wholesale cost and margin are sent to every employee
+             OWASP A01:2021 | API3:2023 Broken Object Property Level Authorization | CWE-213
+             authenticated as a CASHIER (role=employee):
+               /grns -> stock_price, actual_cost, main_branch_price, total_cost, total_profit, discount1, subtotal
+               /grns/stock -> stock_price, actual_cost, main_branch_price, discount1
+               /grns/product/PRD0001/batches -> stock_price, actual_cost, main_branch_price, discount1
+               /grns/1 -> stock_price, actual_cost, main_branch_price, total_cost, total_profit, discount1, subtotal
+               /grns/code/GRN0001 -> stock_price, actual_cost, main_branch_price, total_cost, total_profit, discount1, subtotal
+             administrator still sees cost: yes (4 cost fields)
+               the frontend HID these columns; the server sent them anyway, so a
+               cashier reads every supplier price from the Network tab
+
+   FIXED     V-05b  Password guessing is not rate limited per account
+  Still exploitable : 1  V-20

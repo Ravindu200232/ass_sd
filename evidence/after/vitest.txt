@@ -1,14 +1,14 @@
 
 > pubudu-pos-front-end@0.0.0 test
-> vitest run
+> vitest run --maxWorkers=1 --reporter=dot
 
-[33mBoth esbuild and oxc options were set. oxc options will be used and esbuild options will be ignored.[39m
 
  RUN  v4.1.11 D:/ass_sd/work/pubudu-pos-front-end-secure
 
+···················
 
- Test Files  1 passed (1)
-      Tests  15 passed (15)
-   Start at  14:46:06
-   Duration  820ms (transform 27ms, setup 0ms, import 40ms, tests 18ms, environment 634ms)
+ Test Files  2 passed (2)
+      Tests  19 passed (19)
+   Start at  12:54:50
+   Duration  1.91s (transform 44ms, setup 0ms, import 79ms, tests 34ms, environment 1.32s)
 

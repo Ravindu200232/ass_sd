@@ -1,6 +1,6 @@
 
 ========================================================================
- SE4030 - Vulnerability proof-of-concept suite  [AFTER - all remediation applied]
+ SE4030 - Vulnerability proof-of-concept suite  [current]
  target: http://127.0.0.1:8000/api
 ========================================================================
 
@@ -28,8 +28,8 @@
    FIXED     V-04  Mass assignment erases customer debt and rewrites the business key
              OWASP A08:2021 | API6:2023 | CWE-915 Improperly Controlled Modification of Attributes
              (a) PUT /customers/1  {"credit_balance":0}  -> 422
-                   credit_balance: 45000 -> 45000  (unchanged)
-                   credit_transactions rows afterwards: 0
+                   credit_balance: 44500 -> 44500  (unchanged)
+                   credit_transactions rows afterwards: 5
              (b) PUT /customers/3  {"customer_code":"CUS-HIJACKED"}  -> 422
                    customer_code : CUS0003 -> CUS0003  (unchanged)
                    invoices and credit_transactions join on customer_code, so rewriting it
@@ -97,6 +97,13 @@
                cashier blocked from trail : yes
                actions are attributable to an operator, an IP and a timestamp
 
+   FIXED     V-20  Wholesale cost and margin are sent to every employee
+             OWASP A01:2021 | API3:2023 Broken Object Property Level Authorization | CWE-213
+             authenticated as a CASHIER (role=employee):
+               none of the 5 stock endpoints returned a cost or margin field
+             administrator still sees cost: yes (4 cost fields)
+               supplier pricing is no longer sent to staff who may not see it
+
    FIXED     V-05b  Password guessing is not rate limited per account
              OWASP A07:2021 | CWE-307 Improper Restriction of Excessive Authentication Attempts
              20 consecutive failed logins for user "admin" from one IP
@@ -108,7 +115,7 @@
  SUMMARY
 ========================================================================
   Still exploitable : 0  
-  Fixed             : 13  V-01 V-02 V-03 V-04 V-05a V-05c V-06 V-07 V-08 V-09 V-10 V-11 V-05b
+  Fixed             : 14  V-01 V-02 V-03 V-04 V-05a V-05c V-06 V-07 V-08 V-09 V-10 V-11 V-20 V-05b
 ========================================================================
   target: http://127.0.0.1:8000/api
-  run at: 2026-09-20T09:16:47.650Z
+  run at: 2026-09-21T07:10:01.787Z

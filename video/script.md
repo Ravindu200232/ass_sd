@@ -55,7 +55,7 @@ Say, roughly:
 > Laravel API, React front end, in real use. We built it, and for this
 > assignment we attacked it.
 >
-> We found 18 distinct vulnerabilities. We fixed 13 and documented 5 we
+> We found 19 distinct vulnerabilities. We fixed 14 and documented 5 we
 > deliberately did not fix. We also added Google OpenID Connect sign-in using
 > the Authorization Code flow with PKCE.
 >
@@ -130,7 +130,7 @@ Let it run to the summary. Hold on:
 
 ```
 Still exploitable : 0
-Fixed             : 13
+Fixed             : 14
 ```
 
 > Same script, same fixtures, same server. Zero.
@@ -187,7 +187,8 @@ curl -s -X POST http://127.0.0.1:8000/api/invoices -H "Authorization: Bearer $EM
 
 Show the 422 now, then the second half: a discount with no approved request is
 also refused, and an approval is **single-use** so it cannot be replayed on
-every later sale.
+every later sale. Show `invoicePayload.js`: the normal UI no longer sends
+server-owned totals, balances, credit allocations or `inv_by` at all.
 
 **V-04 — mass assignment.** Show the three lines:
 
@@ -214,7 +215,7 @@ curl -s "http://127.0.0.1:8000/api/audit-logs?action=invoice." \
 
 ---
 
-## 10:15–12:15 · The front end — *Nimthara*
+## 10:15–12:15 · Front end and API response confidentiality — *Nimthara*
 
 **V-13 — demonstrate it, do not describe it.** This is the best 90 seconds in
 the video. Do it live:
@@ -245,6 +246,16 @@ localStorage.setItem('user', JSON.stringify({role:'admin'}))
 
 reload → administrator UI. Then explain the fix in one line: the app now asks
 `GET /me` and the **server** says who you are.
+
+**V-20 — prove the server is not relying on hidden UI columns.** In the browser
+Network tab, or with the PoC output, show the original cashier response from
+`GET /grns/stock`: it includes `actual_cost`, `stock_price` and supplier
+discounts. Then run the fixed PoC result:
+
+> The same cashier still gets stock quantity and the customer selling price,
+> but no wholesale cost or margin field from any of five stock endpoints. An
+> administrator still receives those fields. This is property-level API
+> authorization, not a CSS visibility check.
 
 ---
 

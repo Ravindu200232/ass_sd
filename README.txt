@@ -77,8 +77,8 @@ MODIFIED PROJECT (after fixing the vulnerabilities)
 4. SUMMARY OF WORK
 -------------------------------------------------------------------------------
 
-  18 distinct vulnerabilities identified.
-  13 fixed and verified. 5 documented as deliberately not fixed, with reasons.
+  19 distinct vulnerabilities identified.
+  14 fixed and verified. 5 documented as deliberately not fixed, with reasons.
   Plus an OpenID Connect sign-in feature.
 
   VULNERABILITIES FIXED
@@ -101,6 +101,7 @@ MODIFIED PROJECT (after fixing the vulnerabilities)
     V-08   CORS accepted every origin                         A05:2021   Medium
     V-09   No security response headers (backend)             A05:2021   Medium
     V-11   No security audit trail                            A09:2021   Medium
+    V-20   Cashier GRN APIs disclosed wholesale cost/margin   A01:2021   High
     V-17   Uploads reached a vulnerable parser unvalidated    A05/A06    Medium
     V-18   No security headers or CSP (frontend)              A05:2021   Medium
 
@@ -124,9 +125,11 @@ MODIFIED PROJECT (after fixing the vulnerabilities)
     pre-provisioned staff record is refused.
 
   EVIDENCE
-    Before:  12 of 12 attack scripts succeeded
-    After:    0 of 13 succeed
-    74 PHPUnit security regression tests + 15 frontend tests, all passing
+    Before:  12 of 12 core attack scripts succeeded; V-20 was reproduced
+             separately against the original code.
+    After:    0 of 14 targeted runtime checks succeed
+    90 PHPUnit security regression tests (230 assertions) + 19 frontend tests,
+    all passing
     composer audit  41 advisories -> 0
     npm audit       23 advisories -> 0
 
@@ -143,13 +146,14 @@ MODIFIED PROJECT (after fixing the vulnerabilities)
                     V-01, V-02, V-03, V-05, V-06, Google OIDC
                     API PR #3, Frontend PR #3
 
-  MALITH            Input and business-logic integrity, auditability
+  MALITH            Input/business-logic integrity, auditability + frontend
+                    invoice request boundary
                     V-04, V-10, V-11
-                    API PR #2
+                    API PR #2; frontend branch feat/malith-server-authoritative-invoice-ui
 
-  NIMTHARA          Frontend attack surface
-                    V-13, V-14, V-16, V-17
-                    Frontend PR #2
+  NIMTHARA          Frontend attack surface + API response confidentiality
+                    V-13, V-14, V-16, V-17, V-20
+                    Frontend PR #2; API branch feat/nimthara-cost-exposure
 
   HAMNA             Configuration, transport, dependencies, test suite and CI
                     V-07, V-08, V-09, V-12, V-15, V-18 + 74 security tests
@@ -204,7 +208,7 @@ MODIFIED PROJECT (after fixing the vulnerabilities)
 
   THE TEST SUITES
     mysql -u root -e "CREATE DATABASE pubudu_pos_testing"
-    php artisan test --testsuite=Security     # 74 passing
+    php artisan test --testsuite=Security     # 90 passing (230 assertions)
     npm test                                  # 15 passing
     npm run lint:security                     # clean
 

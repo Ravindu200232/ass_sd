@@ -7,8 +7,8 @@
 | Member | Index number | Workstream |
 |---|---|---|
 | Ravindu Bandara Subasinha *(leader)* | `<INDEX_NO>` | Access control, session management, OAuth/OIDC |
-| Malith `<FULL NAME>` | `<INDEX_NO>` | Input & business-logic integrity, auditability |
-| Nimthara `<FULL NAME>` | `<INDEX_NO>` | Frontend attack surface |
+| Malith `<FULL NAME>` | `<INDEX_NO>` | Input/business-logic integrity, auditability, frontend invoice request boundary |
+| Nimthara `<FULL NAME>` | `<INDEX_NO>` | Frontend attack surface and API response confidentiality |
 | Hamna `<FULL NAME>` | `<INDEX_NO>` | Configuration, transport, dependencies, test suite, CI |
 
 ---
@@ -17,7 +17,7 @@
 
 We took a production point-of-sale system that our team had previously built for a multi-branch tyre and auto-parts business, audited it, and fixed it.
 
-The audit found **18 distinct vulnerabilities**. We fixed 13 and documented 5 as deliberately deferred with reasons. We also implemented **Google OpenID Connect sign-in using the Authorization Code flow with PKCE**, applied to the staff login feature.
+The audit found **19 distinct vulnerabilities**. We fixed 14 and documented 5 as deliberately deferred with reasons. We also implemented **Google OpenID Connect sign-in using the Authorization Code flow with PKCE**, applied to the staff login feature.
 
 Three findings stand out, because each one alone was sufficient to compromise the entire system:
 
@@ -31,10 +31,10 @@ The measurable outcome:
 
 | | Before | After |
 |---|---:|---:|
-| Attack scripts that succeed | 12 / 12 | **0 / 13** |
+| Attack scripts that succeed | 12 / 12 core suite + V-20 reproduced separately | **0 / 14** |
 | Composer advisories | 41 | **0** |
 | npm advisories (2 critical, 14 high) | 23 | **0** |
-| Automated security tests | 0 | **89** |
+| Automated security tests | 0 | **90** (230 assertions) |
 
 All findings were confirmed by executing the attack, not by reading code. Every fix is verified by a runnable script and by a regression test that fails against the original and passes against the fixed version.
 
@@ -59,7 +59,7 @@ We worked from three attackers, which is what makes the severity ratings meaning
 
 **A1 — The anonymous internet.** Can reach the API. Before our work: could create an administrator account (V-01), script the API from any website (V-08), and download `/.env`, `/composer.lock` and `/storage/logs/laravel.log` directly (V-07).
 
-**A2 — A dishonest cashier.** Holds a valid employee token. This is the realistic insider: a shop employee with a till. Before our work: could sell at any price they chose (V-10), erase a customer's debt with no ledger entry (V-04), read every other branch's customers and invoices (V-03), void sales to conceal cash theft (V-02), and read company-wide profit and margin (V-02). Critically, **none of it was logged** (V-11).
+**A2 — A dishonest cashier.** Holds a valid employee token. This is the realistic insider: a shop employee with a till. Before our work: could sell at any price they chose (V-10), erase a customer's debt with no ledger entry (V-04), read every other branch's customers and invoices (V-03), void sales to conceal cash theft (V-02), read company-wide profit and margin (V-02), and inspect supplier cost and margin in ordinary GRN/stock API responses (V-20). Critically, **none of it was logged** (V-11).
 
 **A3 — A network or supply-chain attacker.** Before our work: bearer tokens crossed one hop in cleartext (V-15), a poisoned spreadsheet reached a parser with two known CVEs (V-17 + V-12), and the production hostnames were published in a committed `.env` (V-14).
 
@@ -77,7 +77,7 @@ We combined four techniques deliberately, because each finds what the others mis
 
 **Dynamic testing (black box).** We wrote `evidence/poc/run-all.mjs`, a suite of scripts that perform each attack against a running instance and report `VULNERABLE` or `FIXED`. This is the core of our evidence, because it removes the ambiguity in "we think we fixed it". It is a single command with a pass/fail exit code, so it also serves as the demonstration in the video.
 
-**Regression testing.** 74 PHPUnit tests plus 15 Vitest tests, each written to fail against `v0-original-vulnerable` and pass afterwards.
+**Regression testing.** 90 PHPUnit tests (230 assertions) plus 19 Vitest tests, each written to fail against `v0-original-vulnerable` and pass afterwards.
 
 ### 3.1 A note on verifying rather than assuming
 
@@ -296,6 +296,8 @@ Two ways to steal, both invisible in the books: sell at a private price to an ac
 - **Discounts** — require an **approved, unconsumed** `DiscountRequest` raised by the same cashier, capped at the approved amount.
 
 The client's submitted price is treated as advisory and a mismatch is **rejected** with a 422 naming the line, not silently corrected. Silent correction would let a cashier hand the customer a receipt showing one figure while the books recorded another, and would hide genuine drift between the till and the catalogue.
+
+**Frontend defence in depth.** `buildInvoicePayload()` now sends only the operator's choices and the expected catalogue quote. It deliberately omits `total_amount`, `net_total`, balances, credit allocation and `inv_by`; those are server-derived from locked records and the authenticated token. This does not replace server validation - DevTools can still add fields - but it prevents the normal UI from pretending to author values the server must own. Four Vitest regression tests assert that boundary.
 
 Approvals were made **single-use** (`consumed_at`, `consumed_inv_no`). Without that, one approval for "Rs 2,000 off a Michelin tyre" could be replayed on every later sale of that product, forever. It also gives auditors a direct link from a discounted line back to the administrator who authorised it.
 
@@ -557,6 +559,20 @@ Failures are swallowed after being reported — a business operation must never 
 
 ---
 
+### V-20 · Wholesale cost and margin disclosed to every employee
+
+**OWASP** A01:2021 Broken Access Control · **OWASP API3:2023 Broken Object Property Level Authorization** · **CWE-213**, **CWE-200** · **High**
+
+The front end hid supplier cost and margin columns from an employee, but the API sent the numbers anyway. With an ordinary cashier token, all five endpoints needed for stock lookup returned confidential fields: `GET /grns`, `/grns/stock`, `/grns/product/{code}/batches`, `/grns/{id}` and `/grns/code/{grnCode}`. The responses exposed `stock_price`, `actual_cost`, `main_branch_price`, supplier discount levels, `total_cost` and `total_profit`.
+
+This is not a display bug. A cashier can open the browser Network tab and read exactly what the shop pays for each tyre, calculate the margin, and disclose supplier terms to a competitor. V-02 had already restricted the profit *reports* to administrators; these operational stock APIs remain legitimately reachable by cashiers, so the property-level policy must be enforced in the response itself.
+
+**Fix.** `HidesCostFromEmployees` applies a model-level default deny list to `Grn` and `GrnItem`. Cost, discount and margin attributes are hidden on every serialization unless `revealCostTo()` receives an administrator. The two endpoints that construct response arrays manually use the same single `costFieldsVisibleTo()` decision, returning only availability, selling price and final customer price to employees. This is intentionally fail-safe: a future endpoint that serializes either model omits supplier terms unless an administrator is explicitly authorized.
+
+**Verified.** The runtime PoC calls each of the five endpoints as a cashier and finds none of eleven confidential field names; each response remains HTTP 200 and retains `selling_price`. The same script confirms an administrator still sees cost fields. `ResponseFilteringTest` adds 16 regression tests covering all five endpoints, the safe model default, null-user fail-closed behaviour, and legitimate administrator access.
+
+---
+
 ## 5. Supporting defects fixed in passing
 
 Not headline vulnerabilities, but each one blocked reproducible provisioning or masked a real defect.
@@ -748,22 +764,22 @@ The most useful question is not "what was wrong" but "what would have caught it"
 
 | Measure | Before | After |
 |---|---:|---:|
-| Attack scripts succeeding | **12 / 12** | **0 / 13** |
+| Attack scripts succeeding | **12 / 12** core suite + V-20 separate reproduction | **0 / 14** |
 | Composer advisories | 41 | **0** |
 | npm advisories | 23 (2 critical, 14 high) | **0** |
-| Backend security tests | 0 | **74** (144 assertions) |
-| Frontend security tests | 0 | **15** |
+| Backend security tests | 0 | **90** (230 assertions) |
+| Frontend security tests | 0 | **19** |
 | Security lint gate | none | clean |
 | Framework | Laravel 10.50 (EOL) | Laravel 12.69.2 |
 | Token lifetime | unlimited | 8 hours |
 | Audited security events | 0 | 14 event types |
 
-**Commits:** 19 on the backend, 12 on the frontend, across 8 reviewed pull requests.
-**Diff vs. original:** backend 58 files / +6,750 −1,811; frontend 33 files / +3,079 −571.
+**Commit history:** 23 backend commits and 16 frontend commits after the original baseline, organized on dedicated feature/fix branches before integration.
+**Diff vs. original:** backend 61 files / +7,137 -1,832; frontend 35 files / +3,173 -664.
 
 ### Evidence
 
-`evidence/before/poc-dynamic-testing.txt` and `evidence/after/poc-dynamic-testing.txt` are the raw output of the same script against the same fixtures, before and after. `evidence/poc/run-all.mjs` is runnable by the marker against either tag.
+`evidence/before/poc-dynamic-testing.txt` and `evidence/after/poc-dynamic-testing.txt` are the raw output of the core runtime suite against the same fixtures, before and after. `evidence/before/v20-cost-leak.txt` separately records the V-20 reproduction against the original code; the current `run-all.mjs` includes all 14 checks and is runnable by the marker.
 
 ---
 

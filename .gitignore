@@ -140,3 +140,6 @@ work/
 
 # Rendered intermediate
 report/*.html
+
+# PDF visual-QA renderings
+tmp/

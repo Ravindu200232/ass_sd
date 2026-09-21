@@ -560,6 +560,65 @@ async function v05c(adminToken) {
 }
 
 // ===========================================================================
+// V-20  Wholesale cost and margin sent to employees
+// ===========================================================================
+async function v20(empToken, adminToken) {
+  if (!empToken) return skip('V-20', 'Cost and margin leak', 'employee login failed');
+
+  // Fields that reveal what the business PAYS or MAKES. selling_price is
+  // deliberately absent: the cashier has to see what the customer pays.
+  const COST = [
+    'stock_price', 'actual_cost', 'main_branch_price',
+    'total_cost', 'total_profit', 'discount1', 'subtotal',
+  ];
+
+  const endpoints = [
+    '/grns',
+    '/grns/stock',
+    '/grns/product/PRD0001/batches',
+    '/grns/1',
+    '/grns/code/GRN0001',
+  ];
+
+  const leaking = [];
+  for (const path of endpoints) {
+    const r = await get(path, { token: empToken });
+    if (r.status !== 200) continue;
+
+    const found = COST.filter((k) => new RegExp(`"${k}"`).test(r.text));
+    if (found.length) leaking.push(`${path} -> ${found.join(', ')}`);
+  }
+
+  // The mirror check: an administrator must STILL get the figures, or this is
+  // not a fix, it is a regression.
+  let adminOk = 'not checked';
+  if (adminToken) {
+    const r = await get('/grns/product/PRD0001/batches', { token: adminToken });
+    const found = COST.filter((k) => new RegExp(`"${k}"`).test(r.text));
+    adminOk = found.length
+      ? `yes (${found.length} cost fields)`
+      : 'NO - the fix also blinded the administrator';
+  }
+
+  record(
+    'V-20',
+    'Wholesale cost and margin are sent to every employee',
+    'OWASP A01:2021 | API3:2023 Broken Object Property Level Authorization | CWE-213',
+    leaking.length > 0,
+    [
+      'authenticated as a CASHIER (role=employee):',
+      ...(leaking.length
+        ? leaking.map((s) => '  ' + s)
+        : ['  none of the 5 stock endpoints returned a cost or margin field']),
+      `administrator still sees cost: ${adminOk}`,
+      leaking.length
+        ? '  the frontend HID these columns; the server sent them anyway, so a\n  cashier reads every supplier price from the Network tab'
+        : '  supplier pricing is no longer sent to staff who may not see it',
+    ].join('\n'),
+  );
+}
+
+// ===========================================================================
 // V-11  No security audit trail
 // ===========================================================================
 async function v11(adminToken, empToken) {
@@ -635,6 +694,7 @@ async function main() {
   await v09();
   await v10(colomboToken);
   await v11(adminToken, colomboToken);
+  await v20(colomboToken, adminToken);
 
   // Deliberately LAST. Once V-05b is fixed this test intentionally exhausts
   // the login rate limiter, which would then block the logins that V-06 and
