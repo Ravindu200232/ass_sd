@@ -1,0 +1,114 @@
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Security\AccessControlTest::test_privileged_endpoints_refuse_an_employee(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Security\AuthenticationTest::test_weak_passwords_are_rejected(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Security\ConfigurationTest::test_security_headers_are_present(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Security\ResponseFilteringTest::test_an_employee_never_receives_cost_or_margin(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Security\ResponseFilteringTest::test_an_employee_still_gets_what_they_need(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   PASS  Tests\Feature\Security\AccessControlTest
+  ✓ registration is not reachable without authentication                                                         6.29s  
+  ✓ an employee cannot create users                                                                              0.09s  
+  ✓ registration no longer returns a session token                                                               0.22s  
+  ✓ privileged endpoints refuse an employee with data set "company profit report"                                0.05s  
+  ✓ privileged endpoints refuse an employee with data set "customer export"                                      0.07s  
+  ✓ privileged endpoints refuse an employee with data set "invoice report"                                       0.03s  
+  ✓ privileged endpoints refuse an employee with data set "audit trail"                                          0.07s  
+  ✓ privileged endpoints refuse an employee with data set "list all users"                                       0.05s  
+  ✓ privileged endpoints refuse an employee with data set "reprice a stock batch"                                0.10s  
+  ✓ privileged endpoints refuse an employee with data set "adjust a credit balance"                              0.09s  
+  ✓ privileged endpoints refuse an employee with data set "adjust stock quantity"                                0.13s  
+  ✓ privileged endpoints refuse an employee with data set "cancel an invoice"                                    0.05s  
+  ✓ privileged endpoints refuse an employee with data set "delete a customer"                                    0.08s  
+  ✓ privileged endpoints refuse an employee with data set "create a product"                                     0.09s  
+  ✓ an administrator can reach the same endpoints                                                                0.10s  
+  ✓ discount approval is administrator only                                                                      0.05s  
+  ✓ an employee cannot read another branchs customer                                                             0.06s  
+  ✓ an employee cannot read another branchs invoice                                                              0.09s  
+  ✓ an employee can read their own branchs records                                                               0.07s  
+  ✓ an administrator sees every branch                                                                           0.07s  
+  ✓ listing endpoints are scoped too                                                                             0.08s  
+  ✓ an employee with no department sees nothing                                                                  0.04s  
+
+   PASS  Tests\Feature\Security\AuthenticationTest
+  ✓ an unknown username and a wrong password are indistinguishable                                               0.37s  
+  ✓ a failed login is recorded in the audit trail                                                                0.07s  
+  ✓ the submitted password is never written to the audit trail                                                   0.08s  
+  ✓ repeated failed logins are throttled                                                                         0.10s  
+  ✓ weak passwords are rejected with data set "the most guessed password in the world"                           0.07s  
+  ✓ weak passwords are rejected with data set "too short"                                                        0.05s  
+  ✓ weak passwords are rejected with data set "no digits"                                                        0.06s  
+  ✓ weak passwords are rejected with data set "no symbols"                                                       0.06s  
+  ✓ weak passwords are rejected with data set "no upper case"                                                    0.08s  
+  ✓ weak passwords are rejected with data set "known breached"                                                   0.05s  
+  ✓ a strong password is accepted                                                                                0.09s  
+  ✓ changing a password requires the current one                                                                 0.07s  
+  ✓ a successful password change revokes every session                                                           0.09s  
+  ✓ issued tokens carry an expiry                                                                                0.09s  
+  ✓ tokens are scoped to the users role                                                                          0.09s  
+  ✓ logging in revokes previous sessions                                                                         0.05s  
+  ✓ deactivating a user revokes their existing token                                                             0.06s  
+  ✓ a deactivated user is refused on every request                                                               0.03s  
+  ✓ changing a role revokes the old token                                                                        0.06s  
+  ✓ logout all revokes every session                                                                             0.06s  
+
+   PASS  Tests\Feature\Security\BusinessIntegrityTest
+  ✓ a credit balance cannot be changed through the update endpoint                                               0.06s  
+  ✓ the customer business key cannot be rewritten                                                                0.06s  
+  ✓ the business key is not mass assignable at the model level either                                            0.03s  
+  ✓ a credit adjustment writes a ledger row                                                                      0.07s  
+  ✓ a tampered unit price is rejected                                                                            0.04s  
+  ✓ the catalogue price is accepted                                                                              0.07s  
+  ✓ a discount with no approval is rejected                                                                      0.08s  
+  ✓ an approved discount is accepted and consumed                                                                0.12s  
+  ✓ an approved discount cannot be replayed                                                                      0.10s  
+  ✓ a discount larger than the approved amount is rejected                                                       0.09s  
+  ✓ one cashier cannot spend another cashiers approval                                                           0.05s  
+  ✓ the creating user is taken from the token not the payload                                                    0.07s  
+  ✓ cancelling an invoice preserves the original amounts                                                         0.07s  
+  ✓ the audit trail cannot be modified                                                                           0.08s  
+  ✓ the audit trail cannot be deleted                                                                            0.07s  
+
+   PASS  Tests\Feature\Security\ConfigurationTest
+  ✓ security headers are present with data set "nosniff"                                                         0.06s  
+  ✓ security headers are present with data set "framing"                                                         0.06s  
+  ✓ security headers are present with data set "referrer"                                                        0.03s  
+  ✓ a content security policy is sent                                                                            0.06s  
+  ✓ headers are present on error responses too                                                                   0.07s  
+  ✓ hsts is not sent over plain http                                                                             0.10s  
+  ✓ an unknown origin is not granted cors access                                                                 0.06s  
+  ✓ the configured frontend origin is allowed                                                                    0.04s  
+  ✓ credentials are never allowed cross origin                                                                   0.05s  
+  ✓ an unhandled error does not leak internals                                                                   0.07s  
+  ✓ a missing record does not reveal the model class                                                             0.10s  
+  ✓ the shipped env template is production safe                                                                  0.07s  
+  ✓ the application defaults to debug off when unset                                                             0.06s  
+  ✓ the authorize url uses authorization code with pkce                                                          0.05s  
+  ✓ the pkce verifier is never sent to the client                                                                0.05s  
+  ✓ a callback with an unknown state is refused                                                                  0.05s  
+  ✓ a state value cannot be replayed                                                                             0.06s  
+
+   PASS  Tests\Feature\Security\ResponseFilteringTest
+  ✓ an employee never receives cost or margin with data set "goods receipt list"                                 0.08s  
+  ✓ an employee never receives cost or margin with data set "available stock"                                    0.07s  
+  ✓ an employee never receives cost or margin with data set "batches for a product"                              0.06s  
+  ✓ an employee never receives cost or margin with data set "one goods receipt"                                  0.07s  
+  ✓ an employee never receives cost or margin with data set "goods receipt by code"                              0.05s  
+  ✓ an employee still gets what they need with data set "goods receipt list"                                     0.07s  
+  ✓ an employee still gets what they need with data set "available stock"                                        0.06s  
+  ✓ an employee still gets what they need with data set "batches for a product"                                  0.04s  
+  ✓ an employee still gets what they need with data set "one goods receipt"                                      0.18s  
+  ✓ an employee still gets what they need with data set "goods receipt by code"                                  0.04s  
+  ✓ an administrator still receives cost                                                                         0.05s  
+  ✓ an administrator sees margin on a goods receipt                                                              0.05s  
+  ✓ cost is hidden at the model level by default                                                                 0.04s  
+  ✓ cost is revealed only for an administrator                                                                   0.05s  
+  ✓ a null user is never shown cost                                                                              0.05s  
+  ✓ the admin only stock report is unaffected                                                                    0.06s  
+
+  Tests:    90 passed (230 assertions)
+  Duration: 12.92s
+

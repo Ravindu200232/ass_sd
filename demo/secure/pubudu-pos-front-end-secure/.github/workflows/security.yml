@@ -1,0 +1,110 @@
+name: Security
+
+# The frontend half of the CI gate. Every check here maps to a defect this
+# project fixed:
+#
+#   V-12  23 npm advisories incl. xlsx and jsPDF   -> npm audit
+#   V-13  stored XSS via unescaped document.write  -> lint:security + vitest
+#   V-14  a committed .env                         -> the secret scan
+#   V-16  the token read out of localStorage       -> lint:security
+#
+# lint:security is a separate script from lint because the repository carries
+# ~126 pre-existing no-unused-vars errors that are not security defects (NF-6).
+# Gating on the full lint would mean either a huge unrelated cleanup inside the
+# security change, or a gate nobody can turn on.
+
+on:
+  push:
+    branches: [main, 'feat/**']
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '0 6 * * 1'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Lint, test and build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Security lint
+        # Fails on document.write, innerHTML, dangerouslySetInnerHTML, eval,
+        # a token read out of localStorage, and window.open without noopener.
+        run: npm run lint:security
+
+      - name: Unit tests
+        # Includes the XSS regression suite, which parses the escaped payload
+        # with jsdom and asserts the browser sees text rather than elements.
+        run: npm test
+
+      - name: Production build
+        run: npm run build
+
+  dependencies:
+    name: Dependency advisories
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - run: npm ci
+
+      - name: npm audit
+        # Fails the build on high or critical. The original state was 2 critical
+        # and 14 high, including xlsx - which npm audit cannot fix, because
+        # SheetJS no longer publishes there. package.json now points at the
+        # vendor's own distribution.
+        run: npm audit --audit-level=high
+
+  secrets:
+    name: Secret scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: No environment file may be tracked
+        run: |
+          leaked=$(git ls-files | grep -E '^\.env($|\.)' | grep -v '\.env\.example' || true)
+          if [ -n "$leaked" ]; then
+            echo "::error::Environment files are tracked (V-14):"
+            echo "$leaked"
+            exit 1
+          fi
+          echo "No environment files in the index."
+
+      - name: .gitignore must exclude environment files
+        run: |
+          # The root cause of V-14 was not a careless commit - it was that the
+          # stock Vite .gitignore had no .env rule at all, so nothing prevented
+          # it. Assert the rule exists, not just that the file is currently gone.
+          if ! grep -qE '^\.env$' .gitignore; then
+            echo "::error::.gitignore does not exclude .env (V-14 root cause)."
+            exit 1
+          fi
+          echo ".gitignore excludes environment files."
+
+      - name: gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

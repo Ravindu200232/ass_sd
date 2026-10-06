@@ -1,0 +1,31 @@
+/.phpunit.cache
+/node_modules
+/public/build
+/public/hot
+/public/storage
+/storage/*.key
+/vendor
+.env
+.env.backup
+.env.production
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+auth.json
+npm-debug.log
+yarn-error.log
+/.fleet
+/.idea
+/.vscode
+
+# V-07: runtime logs must never be committed. laravel-serve.out.log and
+# laravel-serve.err.log were tracked in this repository and, because the
+# document root is the project root, were also downloadable over HTTP.
+*.log
+/storage/logs/
+laravel-serve.*.log
+
+# V-14/V-07: every environment file, not just the three that were listed.
+.env
+.env.*
+!.env.example

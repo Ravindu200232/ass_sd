@@ -1,0 +1,870 @@
+{
+  "version": 1,
+  "kind": "google-docs-trusted-read-context",
+  "target": {
+    "documentId": "1ggk8b-y_F74Xa286D8yrlpdYIwuJ0yeksaHk3kJ-Q1E",
+    "title": "SE4030_SSD_Report_Updated",
+    "revisionId": "ANLCKQkPieQKK6IKCavnM5f_g161NeNv5X23sSLeEMjVqLqyN-z8GJZ6r_lS3na0PM7F1L0CCbAjOdSlgQ_j1JcbEmK-JKoseeHIQBXk7rk",
+    "documentUrl": "https://docs.google.com/document/d/1ggk8b-y_F74Xa286D8yrlpdYIwuJ0yeksaHk3kJ-Q1E",
+    "selectedTabId": null
+  },
+  "dropdownMetadata": {
+    "status": "unavailable",
+    "resolvedTool": null,
+    "authoritative": false,
+    "count": 0
+  },
+  "derivedControlInventory": {
+    "hasProtectedControls": false,
+    "authoritativeDropdownCount": 0,
+    "opaqueControlCount": 0,
+    "nativeElementCounts": {
+      "inlineObjectElement": 24
+    },
+    "tabsScanned": [
+      "t.0"
+    ],
+    "controls": [],
+    "nativeElements": [
+      {
+        "type": "inlineObjectElement",
+        "startIndex": 4159,
+        "endIndex": 4160,
+        "tabId": "t.0",
+        "segmentId": null,
+        "container": {
+          "kind": "paragraph",
+          "path": "root.tabs[0].body.content[57]",
+          "tabId": "t.0",
+          "segmentId": null,
+          "startIndex": 4159,
+          "endIndex": 4161,
+          "namedStyleType": "NORMAL_TEXT",
+          "listId": null,
+          "nestingLevel": null,
+          "table": null
+        },
+        "properties": {
+          "inlineObjectId": "i.0",
+          "textStyle": {}
+        }
+      },
+      {
+        "type": "inlineObjectElement",
+        "startIndex": 4265,
+        "endIndex": 4266,
+        "tabId": "t.0",
+        "segmentId": null,
+        "container": {
+          "kind": "paragraph",
+          "path": "root.tabs[0].body.content[59]",
+          "tabId": "t.0",
+          "segmentId": null,
+          "startIndex": 4265,
+          "endIndex": 4267,
+          "namedStyleType": "NORMAL_TEXT",
+          "listId": null,
+          "nestingLevel": null,
+          "table": null
+        },
+        "properties": {
+          "inlineObjectId": "i.1",
+          "textStyle": {}
+        }
+      },
+      {
+        "type": "inlineObjectElement",
+        "startIndex": 4381,
+        "endIndex": 4382,
+        "tabId": "t.0",
+        "segmentId": null,
+        "container": {
+          "kind": "paragraph",
+          "path": "root.tabs[0].body.content[61]",
+          "tabId": "t.0",
+          "segmentId": null,
+          "startIndex": 4381,
+          "endIndex": 4383,
+          "namedStyleType": "NORMAL_TEXT",
+          "listId": null,
+          "nestingLevel": null,
+          "table": null
+        },
+        "properties": {
+          "inlineObjectId": "i.2",
+          "textStyle": {}
+        }
+      },
+      {
+        "type": "inlineObjectElement",
+        "startIndex": 4493,
+        "endIndex": 4494,
+        "tabId": "t.0",
+        "segmentId": null,
+        "container": {
+          "kind": "paragraph",
+          "path": "root.tabs[0].body.content[63]",
+          "tabId": "t.0",
+          "segmentId": null,
+          "startIndex": 4493,
+          "endIndex": 4495,
+          "namedStyleType": "NORMAL_TEXT",
+          "listId": null,
+          "nestingLevel": null,
+          "table": null
+        },
+        "properties": {
+          "inlineObjectId": "i.3",
+          "textStyle": {}
+        }
+      },
+      {
+        "type": "inlineObjectElement",
+        "startIndex": 8793,
+        "endIndex": 8794,
+        "tabId": "t.0",
+        "segmentId": null,
+        "container": {
+          "kind": "paragraph",
+          "path": "root.tabs[0].body.content[101]",
+          "tabId": "t.0",
+          "segmentId": null,
+          "startIndex": 8793,
+          "endIndex": 8795,
+          "namedStyleType": "NORMAL_TEXT",
+          "listId": null,
+          "nestingLevel": null,
+          "table": null
+        },
+        "properties": {
+          "inlineObjectId": "d.18",
+          "textStyle": {
+            "foregroundColor": {
+              "color": {
+                "rgbColor": {}
+              }
+            },
+            "fontSize": {
+              "magnitude": 10,
+              "unit": "PT"
+            },
+            "weightedFontFamily": {
+              "fontFamily": "Times New Roman",
+              "weight": 400
+            }
+          }
+        }
+      },
+      {
+        "type": "inlineObjectElement",
+        "startIndex": 8795,
+        "endIndex": 8796,
+        "tabId": "t.0",
+        "segmentId": null,
+        "container": {
+          "kind": "paragraph",
+          "path": "root.tabs[0].body.content[102]",
+          "tabId": "t.0",
+          "segmentId": null,
+          "startIndex": 8795,
+          "endIndex": 8797,
+          "namedStyleType": "NORMAL_TEXT",
+          "listId": null,
+          "nestingLevel": null,
+          "table": null
+        },
+        "properties": {
+          "inlineObjectId": "d.19",
+          "textStyle": {
+            "foregroundColor": {
+              "color": {
+                "rgbColor": {}
+              }
+            },
+            "fontSize": {
+              "magnitude": 10,
+              "unit": "PT"
+            },
+            "weightedFontFamily": {
+              "fontFamily": "Times New Roman",
+              "weight": 400
+            }
+          }
+        }
+      },
+      {
+        "type": "inlineObjectElement",
+        "startIndex": 9426,
+        "endIndex": 9427,
+        "tabId": "t.0",
+        "segmentId": null,
+        "container": {
+          "kind": "paragraph",
+          "path": "root.tabs[0].body.content[119]",
+          "tabId": "t.0",
+          "segmentId": null,
+          "startIndex": 9426,
+          "endIndex": 9428,
+          "namedStyleType": "NORMAL_TEXT",
+          "listId": null,
+          "nestingLevel": null,
+          "table": null
+        },
+        "properties": {
+          "inlineObjectId": "d.21",
+          "textStyle": {
+            "foregroundColor": {
+              "color": {
+                "rgbColor": {}
+              }
+            },
+            "fontSize": {
+              "magnitude": 10,
+              "unit": "PT"
+            },
+            "weightedFontFamily": {
+              "fontFamily": "Times New Roman",
+              "weight": 400
+            }
+          }
+        }
+      },
+      {
+        "type": "inlineObjectElement",
+        "startIndex": 11231,
+        "endIndex": 11232,
+        "tabId": "t.0",
+        "segmentId": null,
+        "container": {
+          "kind": "paragraph",
+          "path": "root.tabs[0].body.content[136]",
+          "tabId": "t.0",
+          "segmentId": null,
+          "startIndex": 11231,
+          "endIndex": 11233,
+          "namedStyleType": "NORMAL_TEXT",
+          "listId": null,
+          "nestingLevel": null,
+          "table": null
+        },
+        "properties": {
+          "inlineObjectId": "d.30",
+          "textStyle": {
+            "foregroundColor": {
+              "color": {
+                "rgbColor": {}
+              }
+            },
+            "fontSize": {
+              "magnitude": 10,
+              "unit": "PT"
+            },
+            "weightedFontFamily": {
+              "fontFamily": "Times New Roman",
+              "weight": 400
+            }
+          }
+        }
+      },
+      {
+        "type": "inlineObjectElement",
+        "startIndex": 11823,
+        "endIndex": 11824,
+        "tabId": "t.0",
+        "segmentId": null,
+        "container": {
+          "kind": "paragraph",
+          "path": "root.tabs[0].body.content[141]",
+          "tabId": "t.0",
+          "segmentId": null,
+          "startIndex": 11823,
+          "endIndex": 12206,
+          "namedStyleType": "NORMAL_TEXT",
+          "listId": null,
+          "nestingLevel": null,
+          "table": null
+        },
+        "properties": {
+          "inlineObjectId": "d.37",
+          "textStyle": {
+            "foregroundColor": {
+              "color": {
+                "rgbColor": {}
+              }
+            },
+            "fontSize": {
+              "magnitude": 10,
+              "unit": "PT"
+            },
+            "weightedFontFamily": {
+              "fontFamily": "Times New Roman",
+              "weight": 400
+            }
+          }
+        }
+      },
+      {
+        "type": "inlineObjectElement",
+        "startIndex": 12206,
+        "endIndex": 12207,
+        "tabId": "t.0",
+        "segmentId": null,
+        "container": {
+          "kind": "paragraph",
+          "path": "root.tabs[0].body.content[142]",
+          "tabId": "t.0",
+          "segmentId": null,
+          "startIndex": 12206,
+          "endIndex": 12421,
+          "namedStyleType": "NORMAL_TEXT",
+          "listId": null,
+          "nestingLevel": null,
+          "table": null
+        },
+        "properties": {
+          "inlineObjectId": "d.38",
+          "textStyle": {
+            "foregroundColor": {
+              "color": {
+                "rgbColor": {}
+              }
+            },
+            "fontSize": {
+              "magnitude": 10,
+              "unit": "PT"
+            },
+            "weightedFontFamily": {
+              "fontFamily": "Times New Roman",
+              "weight": 400
+            }
+          }
+        }
+      },
+      {
+        "type": "inlineObjectElement",
+        "startIndex": 12931,
+        "endIndex": 12932,
+        "tabId": "t.0",
+        "segmentId": null,
+        "container": {
+          "kind": "paragraph",
+          "path": "root.tabs[0].body.content[156]",
+          "tabId": "t.0",
+          "segmentId": null,
+          "startIndex": 12931,
+          "endIndex": 12933,
+          "namedStyleType": "NORMAL_TEXT",
+          "listId": null,
+          "nestingLevel": null,
+          "table": null
+        },
+        "properties": {
+          "inlineObjectId": "d.41",
+          "textStyle": {
+            "foregroundColor": {
+              "color": {
+                "rgbColor": {}
+              }
+            },
+            "fontSize": {
+              "magnitude": 10,
+              "unit": "PT"
+            },
+            "weightedFontFamily": {
+              "fontFamily": "Times New Roman",
+              "weight": 400
+            }
+          }
+        }
+      },
+      {
+        "type": "inlineObjectElement",
+        "startIndex": 12942,
+        "endIndex": 12943,
+        "tabId": "t.0",
+        "segmentId": null,
+        "container": {
+          "kind": "paragraph",
+          "path": "root.tabs[0].body.content[158]",
+          "tabId": "t.0",
+          "segmentId": null,
+          "startIndex": 12942,
+          "endIndex": 12944,
+          "namedStyleType": "NORMAL_TEXT",
+          "listId": null,
+          "nestingLevel": null,
+          "table": null
+        },
+        "properties": {
+          "inlineObjectId": "d.42",
+          "textStyle": {
+            "foregroundColor": {
+              "color": {
+                "rgbColor": {}
+              }
+            },
+            "fontSize": {
+              "magnitude": 10,
+              "unit": "PT"
+            },
+            "weightedFontFamily": {
+              "fontFamily": "Times New Roman",
+              "weight": 400
+            }
+          }
+        }
+      },
+      {
+        "type": "inlineObjectElement",
+        "startIndex": 22365,
+        "endIndex": 22366,
+        "tabId": "t.0",
+        "segmentId": null,
+        "container": {
+          "kind": "paragraph",
+          "path": "root.tabs[0].body.content[227]",
+          "tabId": "t.0",
+          "segmentId": null,
+          "startIndex": 22321,
+          "endIndex": 22566,
+          "namedStyleType": "NORMAL_TEXT",
+          "listId": null,
+          "nestingLevel": null,
+          "table": null
+        },
+        "properties": {
+          "inlineObjectId": "d.84",
+          "textStyle": {
+            "foregroundColor": {
+              "color": {
+                "rgbColor": {}
+              }
+            },
+            "fontSize": {
+              "magnitude": 10,
+              "unit": "PT"
+            },
+            "weightedFontFamily": {
+              "fontFamily": "Times New Roman",
+              "weight": 400
+            }
+          }
+        }
+      },
+      {
+        "type": "inlineObjectElement",
+        "startIndex": 28070,
+        "endIndex": 28071,
+        "tabId": "t.0",
+        "segmentId": null,
+        "container": {
+          "kind": "paragraph",
+          "path": "root.tabs[0].body.content[261]",
+          "tabId": "t.0",
+          "segmentId": null,
+          "startIndex": 28070,
+          "endIndex": 28072,
+          "namedStyleType": "NORMAL_TEXT",
+          "listId": null,
+          "nestingLevel": null,
+          "table": null
+        },
+        "properties": {
+          "inlineObjectId": "d.105",
+          "textStyle": {
+            "foregroundColor": {
+              "color": {
+                "rgbColor": {}
+              }
+            },
+            "fontSize": {
+              "magnitude": 10,
+              "unit": "PT"
+            },
+            "weightedFontFamily": {
+              "fontFamily": "Times New Roman",
+              "weight": 400
+            }
+          }
+        }
+      },
+      {
+        "type": "inlineObjectElement",
+        "startIndex": 30493,
+        "endIndex": 30494,
+        "tabId": "t.0",
+        "segmentId": null,
+        "container": {
+          "kind": "paragraph",
+          "path": "root.tabs[0].body.content[279]",
+          "tabId": "t.0",
+          "segmentId": null,
+          "startIndex": 30493,
+          "endIndex": 30495,
+          "namedStyleType": "NORMAL_TEXT",
+          "listId": null,
+          "nestingLevel": null,
+          "table": null
+        },
+        "properties": {
+          "inlineObjectId": "d.118",
+          "textStyle": {
+            "foregroundColor": {
+              "color": {
+                "rgbColor": {}
+              }
+            },
+            "fontSize": {
+              "magnitude": 10,
+              "unit": "PT"
+            },
+            "weightedFontFamily": {
+              "fontFamily": "Times New Roman",
+              "weight": 400
+            }
+          }
+        }
+      },
+      {
+        "type": "inlineObjectElement",
+        "startIndex": 32865,
+        "endIndex": 32866,
+        "tabId": "t.0",
+        "segmentId": null,
+        "container": {
+          "kind": "paragraph",
+          "path": "root.tabs[0].body.content[293]",
+          "tabId": "t.0",
+          "segmentId": null,
+          "startIndex": 32865,
+          "endIndex": 32867,
+          "namedStyleType": "NORMAL_TEXT",
+          "listId": null,
+          "nestingLevel": null,
+          "table": null
+        },
+        "properties": {
+          "inlineObjectId": "d.126",
+          "textStyle": {
+            "foregroundColor": {
+              "color": {
+                "rgbColor": {}
+              }
+            },
+            "fontSize": {
+              "magnitude": 10,
+              "unit": "PT"
+            },
+            "weightedFontFamily": {
+              "fontFamily": "Times New Roman",
+              "weight": 400
+            }
+          }
+        }
+      },
+      {
+        "type": "inlineObjectElement",
+        "startIndex": 32868,
+        "endIndex": 32869,
+        "tabId": "t.0",
+        "segmentId": null,
+        "container": {
+          "kind": "paragraph",
+          "path": "root.tabs[0].body.content[295]",
+          "tabId": "t.0",
+          "segmentId": null,
+          "startIndex": 32868,
+          "endIndex": 32870,
+          "namedStyleType": "NORMAL_TEXT",
+          "listId": null,
+          "nestingLevel": null,
+          "table": null
+        },
+        "properties": {
+          "inlineObjectId": "d.127",
+          "textStyle": {
+            "foregroundColor": {
+              "color": {
+                "rgbColor": {}
+              }
+            },
+            "fontSize": {
+              "magnitude": 10,
+              "unit": "PT"
+            },
+            "weightedFontFamily": {
+              "fontFamily": "Times New Roman",
+              "weight": 400
+            }
+          }
+        }
+      },
+      {
+        "type": "inlineObjectElement",
+        "startIndex": 34240,
+        "endIndex": 34241,
+        "tabId": "t.0",
+        "segmentId": null,
+        "container": {
+          "kind": "paragraph",
+          "path": "root.tabs[0].body.content[306]",
+          "tabId": "t.0",
+          "segmentId": null,
+          "startIndex": 34240,
+          "endIndex": 34242,
+          "namedStyleType": "NORMAL_TEXT",
+          "listId": null,
+          "nestingLevel": null,
+          "table": null
+        },
+        "properties": {
+          "inlineObjectId": "d.132",
+          "textStyle": {
+            "foregroundColor": {
+              "color": {
+                "rgbColor": {}
+              }
+            },
+            "fontSize": {
+              "magnitude": 10,
+              "unit": "PT"
+            },
+            "weightedFontFamily": {
+              "fontFamily": "Times New Roman",
+              "weight": 400
+            }
+          }
+        }
+      },
+      {
+        "type": "inlineObjectElement",
+        "startIndex": 36241,
+        "endIndex": 36242,
+        "tabId": "t.0",
+        "segmentId": null,
+        "container": {
+          "kind": "paragraph",
+          "path": "root.tabs[0].body.content[330]",
+          "tabId": "t.0",
+          "segmentId": null,
+          "startIndex": 36241,
+          "endIndex": 36243,
+          "namedStyleType": "NORMAL_TEXT",
+          "listId": null,
+          "nestingLevel": null,
+          "table": null
+        },
+        "properties": {
+          "inlineObjectId": "d.142",
+          "textStyle": {
+            "foregroundColor": {
+              "color": {
+                "rgbColor": {}
+              }
+            },
+            "fontSize": {
+              "magnitude": 10,
+              "unit": "PT"
+            },
+            "weightedFontFamily": {
+              "fontFamily": "Times New Roman",
+              "weight": 400
+            }
+          }
+        }
+      },
+      {
+        "type": "inlineObjectElement",
+        "startIndex": 41938,
+        "endIndex": 41939,
+        "tabId": "t.0",
+        "segmentId": null,
+        "container": {
+          "kind": "paragraph",
+          "path": "root.tabs[0].body.content[388]",
+          "tabId": "t.0",
+          "segmentId": null,
+          "startIndex": 41938,
+          "endIndex": 41940,
+          "namedStyleType": "NORMAL_TEXT",
+          "listId": null,
+          "nestingLevel": null,
+          "table": null
+        },
+        "properties": {
+          "inlineObjectId": "d.159",
+          "textStyle": {
+            "foregroundColor": {
+              "color": {
+                "rgbColor": {}
+              }
+            },
+            "fontSize": {
+              "magnitude": 10,
+              "unit": "PT"
+            },
+            "weightedFontFamily": {
+              "fontFamily": "Times New Roman",
+              "weight": 400
+            }
+          }
+        }
+      },
+      {
+        "type": "inlineObjectElement",
+        "startIndex": 44944,
+        "endIndex": 44945,
+        "tabId": "t.0",
+        "segmentId": null,
+        "container": {
+          "kind": "paragraph",
+          "path": "root.tabs[0].body.content[407]",
+          "tabId": "t.0",
+          "segmentId": null,
+          "startIndex": 44944,
+          "endIndex": 44946,
+          "namedStyleType": "NORMAL_TEXT",
+          "listId": null,
+          "nestingLevel": null,
+          "table": null
+        },
+        "properties": {
+          "inlineObjectId": "d.177",
+          "textStyle": {
+            "foregroundColor": {
+              "color": {
+                "rgbColor": {}
+              }
+            },
+            "fontSize": {
+              "magnitude": 10,
+              "unit": "PT"
+            },
+            "weightedFontFamily": {
+              "fontFamily": "Times New Roman",
+              "weight": 400
+            }
+          }
+        }
+      },
+      {
+        "type": "inlineObjectElement",
+        "startIndex": 52518,
+        "endIndex": 52519,
+        "tabId": "t.0",
+        "segmentId": null,
+        "container": {
+          "kind": "paragraph",
+          "path": "root.tabs[0].body.content[460]",
+          "tabId": "t.0",
+          "segmentId": null,
+          "startIndex": 52518,
+          "endIndex": 52520,
+          "namedStyleType": "NORMAL_TEXT",
+          "listId": null,
+          "nestingLevel": null,
+          "table": null
+        },
+        "properties": {
+          "inlineObjectId": "i.4",
+          "textStyle": {
+            "foregroundColor": {
+              "color": {
+                "rgbColor": {}
+              }
+            },
+            "fontSize": {
+              "magnitude": 10,
+              "unit": "PT"
+            },
+            "weightedFontFamily": {
+              "fontFamily": "Times New Roman",
+              "weight": 400
+            }
+          }
+        }
+      },
+      {
+        "type": "inlineObjectElement",
+        "startIndex": 52626,
+        "endIndex": 52627,
+        "tabId": "t.0",
+        "segmentId": null,
+        "container": {
+          "kind": "paragraph",
+          "path": "root.tabs[0].body.content[462]",
+          "tabId": "t.0",
+          "segmentId": null,
+          "startIndex": 52626,
+          "endIndex": 52629,
+          "namedStyleType": "NORMAL_TEXT",
+          "listId": null,
+          "nestingLevel": null,
+          "table": null
+        },
+        "properties": {
+          "inlineObjectId": "i.5",
+          "textStyle": {
+            "foregroundColor": {
+              "color": {
+                "rgbColor": {}
+              }
+            },
+            "fontSize": {
+              "magnitude": 10,
+              "unit": "PT"
+            },
+            "weightedFontFamily": {
+              "fontFamily": "Times New Roman",
+              "weight": 400
+            }
+          }
+        }
+      },
+      {
+        "type": "inlineObjectElement",
+        "startIndex": 52627,
+        "endIndex": 52628,
+        "tabId": "t.0",
+        "segmentId": null,
+        "container": {
+          "kind": "paragraph",
+          "path": "root.tabs[0].body.content[462]",
+          "tabId": "t.0",
+          "segmentId": null,
+          "startIndex": 52626,
+          "endIndex": 52629,
+          "namedStyleType": "NORMAL_TEXT",
+          "listId": null,
+          "nestingLevel": null,
+          "table": null
+        },
+        "properties": {
+          "inlineObjectId": "i.6",
+          "textStyle": {
+            "foregroundColor": {
+              "color": {
+                "rgbColor": {}
+              }
+            },
+            "fontSize": {
+              "magnitude": 10,
+              "unit": "PT"
+            },
+            "weightedFontFamily": {
+              "fontFamily": "Times New Roman",
+              "weight": 400
+            }
+          }
+        }
+      }
+    ]
+  },
+  "editGuidance": {
+    "advisoryOnly": true,
+    "requiresTargetedPreservation": false,
+    "recommendedBehavior": "No protected controls were detected in the scanned scope.",
+    "warnings": []
+  }
+}
+

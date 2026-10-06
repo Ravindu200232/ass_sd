@@ -1,0 +1,64 @@
+{
+  "$comment": [
+    "V-15 fix: the /api proxy destination was http://pubudutyres.codexpress.codes,",
+    "while .env pointed at https:// for the SAME host. Every request routed through",
+    "this rewrite carries 'Authorization: Bearer <token>' (src/lib/api.js:18), so the",
+    "bearer token, customer records and pricing travelled one hop in cleartext and",
+    "were readable by anyone on the path. Now https://.",
+    "",
+    "V-18 fix: this file previously had no 'headers' block at all, and index.html has",
+    "no CSP meta tag, so the deployed SPA shipped with no security headers whatsoever.",
+    "The Content-Security-Policy below is the defence-in-depth layer behind the stored",
+    "XSS fixed in V-13: even if an unescaped sink is reintroduced, an injected script",
+    "cannot load external code or exfiltrate to an attacker-controlled origin.",
+    "",
+    "OWASP A02:2021 Cryptographic Failures (CWE-319 Cleartext Transmission)",
+    "OWASP A05:2021 Security Misconfiguration (CWE-693 Protection Mechanism Failure)"
+  ],
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://pubudutyres.codexpress.codes/api/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob:; connect-src 'self' https://pubudutyres.codexpress.codes https://accounts.google.com https://oauth2.googleapis.com; frame-src https://accounts.google.com; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=31536000; includeSubDomains; preload"
+        },
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        {
+          "key": "Permissions-Policy",
+          "value": "accelerometer=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), usb=(), xr-spatial-tracking=()"
+        },
+        { "key": "Cross-Origin-Opener-Policy", "value": "same-origin" },
+        { "key": "X-Permitted-Cross-Domain-Policies", "value": "none" }
+      ]
+    },
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/index.html",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store, must-revalidate" }
+      ]
+    }
+  ]
+}

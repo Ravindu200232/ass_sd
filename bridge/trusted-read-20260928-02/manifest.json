@@ -1,0 +1,60 @@
+{
+  "bridgeVersion": "3.6",
+  "kind": "google-docs-trusted-read",
+  "status": "complete",
+  "outputDir": "/d/ass_sd/bridge/trusted-read-20260928-02",
+  "target": {
+    "documentId": "1ggk8b-y_F74Xa286D8yrlpdYIwuJ0yeksaHk3kJ-Q1E",
+    "title": "SE4030_SSD_Report_Updated",
+    "revisionId": "ANLCKQkPieQKK6IKCavnM5f_g161NeNv5X23sSLeEMjVqLqyN-z8GJZ6r_lS3na0PM7F1L0CCbAjOdSlgQ_j1JcbEmK-JKoseeHIQBXk7rk",
+    "documentUrl": "https://docs.google.com/document/d/1ggk8b-y_F74Xa286D8yrlpdYIwuJ0yeksaHk3kJ-Q1E",
+    "selectedTabId": null
+  },
+  "dropdownMetadata": {
+    "status": "unavailable",
+    "resolvedTool": null,
+    "authoritative": false,
+    "count": 0
+  },
+  "controlAwareness": {
+    "hasProtectedControls": false,
+    "authoritativeDropdownCount": 0,
+    "opaqueControlCount": 0,
+    "affectedParagraphCount": 0,
+    "nativeElementCounts": {
+      "inlineObjectElement": 24
+    },
+    "preservationRequired": false,
+    "recommendedBehavior": "No protected controls were detected in the scanned scope."
+  },
+  "warnings": [],
+  "files": {
+    "document_result": {
+      "path": "/d/ass_sd/bridge/trusted-read-20260928-02/document-result.json",
+      "bytes": 2370592,
+      "sha256": "edf1806cc775495041ca0d96a421c117c1618bac1dd92899b2d1887102c34b09"
+    },
+    "control_inventory": {
+      "path": "/d/ass_sd/bridge/trusted-read-20260928-02/control-inventory.json",
+      "bytes": 22924,
+      "sha256": "f02caea60825893fbc3a1af284af092b71584eb798630dde9d7cb5946f9c238c"
+    },
+    "document_outline": {
+      "path": "/d/ass_sd/bridge/trusted-read-20260928-02/document-outline.json",
+      "bytes": 308097,
+      "sha256": "7982cfa70692563e5bdaa6b0466e3a8f92d7d6d5d5351f203e09bbef4f0c1773"
+    },
+    "document_text": {
+      "path": "/d/ass_sd/bridge/trusted-read-20260928-02/document-text.md",
+      "bytes": 82211,
+      "sha256": "f299a45e9a973a3b00a8905842a6171473a7376e74026b8210aeb86d6d27b5c7"
+    },
+    "receipt": {
+      "path": "/d/ass_sd/bridge/trusted-read-20260928-02/receipt.json",
+      "bytes": 998,
+      "sha256": "2886c8e5c8dc6a161d26fc397f89d8136548a596728c5febc8b887065850414a"
+    }
+  },
+  "error": null
+}
+

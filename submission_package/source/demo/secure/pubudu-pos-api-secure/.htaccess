@@ -1,0 +1,119 @@
+# =============================================================================
+# V-07 fix - deny web access to the application source and its secrets.
+#
+# THE PROBLEM
+#   This project is deployed on shared hosting where the document root is the
+#   PROJECT root, not public/. The front controller (index.php) and this file
+#   were copied up from public/ to make that work, but the copy was verbatim:
+#   it contained only Laravel's stock rewrite and no access rules.
+#
+#   Because the rewrite to index.php only fires for paths that do NOT exist on
+#   disk:
+#
+#       RewriteCond %{REQUEST_FILENAME} !-f
+#
+#   every file that DOES exist was served as-is. That made the following
+#   downloadable by anyone, with no authentication:
+#
+#       /.env                      DB password, APP_KEY, OneSignal REST key
+#       /composer.json /.lock      exact dependency versions -> CVE matching
+#       /storage/logs/laravel.log  stack traces and request data
+#       /laravel-serve.out.log     request history
+#       /database/migrations/*     full schema
+#       /app/**, /routes/**        entire application source
+#
+#   APP_KEY alone is game over: it signs and encrypts every Laravel cookie and
+#   signed URL.
+#
+# THE PROPER FIX
+#   Point the hosting document root at public/ and delete this file and the
+#   root index.php. That is the arrangement Laravel is designed for, and it
+#   makes source exposure structurally impossible rather than a matter of
+#   getting deny rules right.
+#
+#   It is NOT done in this commit because changing the document root requires
+#   hosting control-panel access the team does not have, and getting it wrong
+#   takes the live POS offline. It is tracked as NF-5 in the report, with a
+#   runbook.
+#
+# WHAT THIS FILE DOES INSTEAD
+#   Defence in depth: explicitly refuse every path that is not meant to be
+#   served, before the front-controller rewrite gets a chance to pass it
+#   through. mod_rewrite is used rather than <Files>/<Directory> because those
+#   directives are frequently disabled in shared-hosting .htaccess contexts,
+#   whereas mod_rewrite is already required for the app to function at all.
+#
+#   OWASP A05:2021 Security Misconfiguration
+#   CWE-548 Exposure of Information Through Directory Listing
+#   CWE-552 Files or Directories Accessible to External Parties
+# =============================================================================
+
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    # Never serve a directory index, even if mod_negotiation is unavailable.
+    Options -Indexes
+
+    RewriteEngine On
+
+    # -------------------------------------------------------------------------
+    # DENY RULES - these must precede the front-controller rewrite below.
+    # -------------------------------------------------------------------------
+
+    # 1. Any dotfile or dot-directory, at any depth: .env, .env.backup, .git/,
+    #    .gitignore, .htpasswd, .user.ini, editor swap files.
+    RewriteRule (^|/)\.(?!well-known/) - [F,L]
+
+    # 2. Application directories that must never be reachable over HTTP.
+    RewriteRule ^(app|bootstrap|config|database|resources|routes|storage|tests|vendor|node_modules)(/|$) - [F,L]
+
+    # 3. Project metadata and tooling at the root.
+    RewriteRule ^(artisan|server\.php|composer\.(json|lock)|package(-lock)?\.json|phpunit\.xml|vite\.config\.js|README(\.md)?|CHANGELOG(\.md)?|SECURITY\.md)$ - [F,L]
+
+    # 4. Any file whose extension implies source, configuration, data or logs.
+    #    index.php is matched by none of these and remains reachable.
+    RewriteRule \.(env|log|lock|sql|sqlite|bak|old|orig|save|swp|swo|ini|sh|bat|ps1|yml|yaml|dist|twig|blade\.php)$ - [F,L]
+
+    # -------------------------------------------------------------------------
+    # Stock Laravel front-controller handling.
+    # -------------------------------------------------------------------------
+
+    # Pass the Authorization header through to PHP. Without this, CGI/FastCGI
+    # strips it and every bearer token is silently lost.
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Redirect trailing slashes if not a folder.
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Send remaining requests to the front controller.
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>
+
+# Belt and braces: if mod_rewrite is ever disabled, the app stops working - but
+# these must still hold. Guarded so a server without mod_authz_core (Apache
+# 2.2) does not 500 on unknown directives.
+<IfModule mod_authz_core.c>
+    <FilesMatch "^\.|\.(env|log|lock|sql|sqlite|bak|old|orig|ini|sh|yml|yaml)$">
+        Require all denied
+    </FilesMatch>
+    <FilesMatch "^(artisan|server\.php|composer\.json|composer\.lock|package\.json|package-lock\.json|phpunit\.xml)$">
+        Require all denied
+    </FilesMatch>
+</IfModule>
+
+# Security response headers, in case a request is served by Apache without ever
+# reaching PHP (a static file, or an error page). The application sets the same
+# headers on every PHP response via App\Http\Middleware\SecurityHeaders.
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "DENY"
+    Header always set Referrer-Policy "no-referrer"
+    Header always unset X-Powered-By
+</IfModule>

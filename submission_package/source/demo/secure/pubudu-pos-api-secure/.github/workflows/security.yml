@@ -1,0 +1,147 @@
+name: Security
+
+# One of the "best practices that would have prevented this" from the report,
+# made real rather than recommended. Every defect in this project was the kind a
+# machine can catch on every push:
+#
+#   V-12  41 Composer advisories and an EOL framework   -> composer audit
+#   V-01  a public endpoint that minted admin tokens    -> the security suite
+#   V-02  role middleware applied to zero routes        -> the security suite
+#   V-03  cross-branch record access                    -> the security suite
+#   V-14  a committed .env                              -> the secret scan below
+#
+# The suite exits non-zero on failure, so a regression blocks the merge instead
+# of being discovered by a marker.
+
+on:
+  push:
+    branches: [main, 'feat/**']
+  pull_request:
+    branches: [main]
+  schedule:
+    # Advisories are published against code that has not changed, so a repo that
+    # is only scanned on push goes stale. Mondays, 06:00 UTC.
+    - cron: '0 6 * * 1'
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    name: Security regression suite
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        # Matches the production engine. The schema uses MySQL-specific
+        # features - a generated column and several ENUMs - so a suite that
+        # passed on SQLite would not be evidence of anything.
+        image: mysql:8.0
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+          MYSQL_DATABASE: pubudu_pos_testing
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          # Matches composer.json's "php": "^8.2" floor, raised from ^8.1 in
+          # V-12 because PHP 8.1 is past end of life.
+          php-version: '8.2'
+          extensions: mbstring, pdo_mysql, bcmath, intl
+          coverage: none
+
+      - name: Cache Composer packages
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}
+
+      - name: Install dependencies
+        # --no-dev is wrong here: the suite needs PHPUnit. Production installs
+        # use --no-dev so that Ignition, Faker and Sail never ship.
+        run: composer install --prefer-dist --no-interaction --no-progress
+
+      - name: Prepare environment
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+          # Overridden for CI only; .env.example correctly defaults these to
+          # production/false.
+          sed -i 's/^APP_ENV=.*/APP_ENV=testing/' .env
+          sed -i 's/^DB_DATABASE=.*/DB_DATABASE=pubudu_pos_testing/' .env
+          sed -i 's/^DB_USERNAME=.*/DB_USERNAME=root/' .env
+          sed -i 's/^DB_PASSWORD=.*/DB_PASSWORD=/' .env
+
+      - name: Run migrations
+        run: php artisan migrate --force
+
+      - name: Security regression suite
+        run: php artisan test --testsuite=Security
+
+      - name: Full test suite
+        run: php artisan test
+
+  dependencies:
+    name: Dependency advisories
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-interaction --no-progress
+
+      - name: composer audit
+        # This is the check that would have caught V-12 the day Laravel 10 went
+        # end of life, rather than at assignment time with 41 open advisories.
+        run: composer audit --no-interaction
+
+  secrets:
+    name: Secret scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history: a secret deleted in the working tree but still present
+          # in an earlier commit is still leaked. That is exactly the state the
+          # frontend .env was left in (V-14 / NF-5).
+          fetch-depth: 0
+
+      - name: No environment file may be tracked
+        run: |
+          if git ls-files --error-unmatch .env 2>/dev/null; then
+            echo "::error::.env is tracked. Environment files must never be committed (V-14)."
+            exit 1
+          fi
+          echo "No .env in the index."
+
+      - name: No runtime logs may be tracked
+        run: |
+          tracked_logs=$(git ls-files '*.log' || true)
+          if [ -n "$tracked_logs" ]; then
+            echo "::error::Log files are tracked (V-07):"
+            echo "$tracked_logs"
+            exit 1
+          fi
+          echo "No log files in the index."
+
+      - name: gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

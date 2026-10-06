@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+>
+    <!--
+        V-18 (supporting): the two DB_ lines below used to be COMMENTED OUT:
+
+            <!-\- <env name="DB_CONNECTION" value="sqlite"/> -\->
+            <!-\- <env name="DB_DATABASE" value=":memory:"/> -\->
+
+        so `php artisan test` ran against whatever .env pointed at - in
+        practice, the developer's working database, and on a shared host
+        potentially the live one. Any test using RefreshDatabase would have
+        truncated it.
+
+        They are not simply uncommented, because this schema is MySQL-specific:
+        invoices.remaining_balance is a ->virtualAs() generated column and
+        several columns are ENUMs, neither of which SQLite supports. Tests
+        therefore run against a SEPARATE MySQL database named by
+        DB_DATABASE_TEST, defaulting to pubudu_pos_testing. It is created once
+        with:
+
+            mysql -u root -e "CREATE DATABASE pubudu_pos_testing"
+
+        Using a real MySQL instance is also the more honest arrangement: a
+        security test that passes on SQLite and fails on the production engine
+        is worse than no test at all.
+    -->
+    <testsuites>
+        <testsuite name="Unit">
+            <directory>tests/Unit</directory>
+        </testsuite>
+        <testsuite name="Feature">
+            <directory>tests/Feature</directory>
+            <exclude>tests/Feature/Security</exclude>
+        </testsuite>
+        <testsuite name="Security">
+            <directory>tests/Feature/Security</directory>
+        </testsuite>
+    </testsuites>
+    <source>
+        <include>
+            <directory>app</directory>
+        </include>
+    </source>
+    <php>
+        <env name="APP_ENV" value="testing"/>
+        <!--
+            4 rounds instead of 12 so the suite is not dominated by bcrypt.
+            This is a TEST-ONLY value; config/hashing.php still defaults to 12.
+        -->
+        <env name="BCRYPT_ROUNDS" value="4"/>
+        <env name="CACHE_DRIVER" value="array"/>
+        <env name="CACHE_STORE" value="array"/>
+
+        <!-- Never the application database. See the note above. -->
+        <env name="DB_CONNECTION" value="mysql"/>
+        <env name="DB_DATABASE" value="pubudu_pos_testing"/>
+
+        <!-- V-08: the CORS tests need a known allow-list to assert against. -->
+        <env name="FRONTEND_URLS" value="http://localhost:5173"/>
+
+        <!-- V-06: a short expiry so token lifetime is assertable. -->
+        <env name="SANCTUM_TOKEN_EXPIRATION" value="480"/>
+
+        <!--
+            Google OIDC tests use these placeholders. They are obviously not
+            real credentials; the tests that need a valid ID token mint their
+            own with a locally generated key pair rather than calling Google.
+        -->
+        <env name="GOOGLE_CLIENT_ID" value="test-client-id.apps.googleusercontent.com"/>
+        <env name="GOOGLE_CLIENT_SECRET" value="test-client-secret"/>
+        <env name="GOOGLE_REDIRECT_URI" value="http://localhost:5173/auth/callback"/>
+
+        <env name="MAIL_MAILER" value="array"/>
+        <env name="PULSE_ENABLED" value="false"/>
+        <env name="QUEUE_CONNECTION" value="sync"/>
+        <env name="SESSION_DRIVER" value="array"/>
+        <env name="TELESCOPE_ENABLED" value="false"/>
+    </php>
+</phpunit>

@@ -1,0 +1,32 @@
+{
+  "bridgeVersion": "3.6",
+  "kind": "google-docs-trusted-read-receipt",
+  "status": "complete",
+  "target": {
+    "documentId": "1ggk8b-y_F74Xa286D8yrlpdYIwuJ0yeksaHk3kJ-Q1E",
+    "title": "SE4030_SSD_Report_Updated",
+    "revisionId": "ANLCKQkPieQKK6IKCavnM5f_g161NeNv5X23sSLeEMjVqLqyN-z8GJZ6r_lS3na0PM7F1L0CCbAjOdSlgQ_j1JcbEmK-JKoseeHIQBXk7rk",
+    "documentUrl": "https://docs.google.com/document/d/1ggk8b-y_F74Xa286D8yrlpdYIwuJ0yeksaHk3kJ-Q1E",
+    "selectedTabId": null
+  },
+  "dropdownMetadata": {
+    "status": "unavailable",
+    "resolvedTool": null,
+    "authoritative": false,
+    "count": 0
+  },
+  "controlAwareness": {
+    "hasProtectedControls": false,
+    "authoritativeDropdownCount": 0,
+    "opaqueControlCount": 0,
+    "affectedParagraphCount": 0,
+    "nativeElementCounts": {
+      "inlineObjectElement": 24
+    },
+    "preservationRequired": false,
+    "recommendedBehavior": "No protected controls were detected in the scanned scope."
+  },
+  "warnings": [],
+  "error": null
+}
+

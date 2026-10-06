@@ -1,0 +1,121 @@
+
+========================================================================
+ SE4030 - Vulnerability proof-of-concept suite  [current]
+ target: http://127.0.0.1:8000/api
+========================================================================
+
+  admin token   : acquired
+  cashier token : acquired
+
+   FIXED     V-01  Unauthenticated registration grants an administrator token
+             OWASP A01:2021 Broken Access Control | CWE-862 Missing Authorization | CVSS 9.8
+             POST http://127.0.0.1:8000/api/register  (no Authorization header)
+               body contained "role":"admin"
+               -> HTTP 401, role granted = none
+               no token issued
+
+   FIXED     V-02  Administrator-only operations are reachable by any employee
+             OWASP A01:2021 Broken Access Control | API5:2023 BFLA | CWE-285 Improper Authorization
+             every privileged probe was refused with 401/403
+
+   FIXED     V-03  Employee reads another branch's customers and invoices (IDOR / BOLA)
+             OWASP A01:2021 | API1:2023 BOLA | CWE-639 Authorization Bypass Through User-Controlled Key
+             authenticated as the COLOMBO cashier (department_id=1)
+               GET /customers/2  -> 404
+               GET /invoices/2   -> 404
+               both records belong to department_id=2 (Kandy)
+
+   FIXED     V-04  Mass assignment erases customer debt and rewrites the business key
+             OWASP A08:2021 | API6:2023 | CWE-915 Improperly Controlled Modification of Attributes
+             (a) PUT /customers/1  {"credit_balance":0}  -> 422
+                   credit_balance: 44500 -> 44500  (unchanged)
+                   credit_transactions rows afterwards: 5
+             (b) PUT /customers/3  {"customer_code":"CUS-HIJACKED"}  -> 422
+                   customer_code : CUS0003 -> CUS0003  (unchanged)
+                   invoices and credit_transactions join on customer_code, so rewriting it
+                   re-points a customer at another customer's financial history
+               neither field appears in the controller validation rules; both reach the
+               model through $request->all() at CustomerController.php:148
+
+   FIXED     V-05a  Login responses reveal whether a username exists
+             OWASP A07:2021 Identification and Authentication Failures | CWE-204 Observable Response Discrepancy
+             unknown username -> HTTP 401  "The username or password is incorrect."
+             known username, wrong password -> HTTP 401  "The username or password is incorrect."
+               responses are identical - nothing leaks
+
+   FIXED     V-05c  Password policy accepts "123456"
+             OWASP A07:2021 | CWE-521 Weak Password Requirements
+             POST /register with password "123456" -> 422
+               rejected: {"success":false,"message":"The password field must be at least 12 characters."}
+
+   FIXED     V-06  Tokens survive account deactivation and never expire
+             OWASP A07:2021 | CWE-613 Insufficient Session Expiration | CWE-672 Operation on Expired Resource
+             employee logs in            -> token issued, GET /me 200
+             admin sets is_active=false  -> PUT /users/4 200
+             fresh login now refused     -> POST /login 403
+             EXISTING token replayed     -> GET /me 401  correctly rejected
+               config/sanctum.php sets expiration => null, so that token is valid forever
+
+   FIXED     V-07  Server returns internal exception detail to the client
+             OWASP A05:2021 Security Misconfiguration | CWE-209 Generation of Error Message Containing Sensitive Information
+             no internal detail leaked (carts -> 404, products -> 403)
+
+   FIXED     V-08  CORS policy accepts every origin
+             OWASP A05:2021 | CWE-942 Permissive Cross-domain Policy
+             request sent with Origin: https://attacker.example.com
+               Access-Control-Allow-Origin      : (absent)
+               Access-Control-Allow-Credentials : (absent)
+               origin is restricted
+
+   FIXED     V-09  Security response headers are absent
+             OWASP A05:2021 | CWE-693 Protection Mechanism Failure
+             headers on an authenticated API response:
+               [present] x-content-type-options = nosniff
+               [present] x-frame-options = DENY
+               [present] referrer-policy = no-referrer
+               [present] content-security-policy = default-src 'none'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'; sandbox
+               [MISSING] strict-transport-security
+
+   FIXED     V-10  Cashier sets the selling price, bypassing the discount-approval workflow
+             OWASP A04:2021 Insecure Design | CWE-602 Client-Side Enforcement of Server-Side Security
+             (a) price tampering    POST /invoices -> 422
+                   catalogue price (grn_items.selling_price) : 32000 LKR
+                   price submitted by the cashier            : 1 LKR
+                   net_total persisted by the server         : n/a
+                   rejected - the server resolved the price from the catalogue
+             (b) unapproved discount  POST /invoices -> 422
+                   correct price, but discount 31999 with no approved DiscountRequest
+                   rejected - a discount now requires an approved, unconsumed request
+               {"success":false,"message":"The given data was invalid.","errors":{"items.0.discount":["No approved discount is available for Michelin Primacy 4 205\/55R16. Raise a discount request and have it approved first."]}}
+
+   FIXED     V-11  Security-relevant actions are not recorded anywhere
+             OWASP A09:2021 Security Logging and Monitoring Failures | CWE-778 Insufficient Logging
+             credit adjustment performed -> 200
+             GET /audit-logs -> 200  10 entries
+               credit adjustment recorded : yes
+               failed login recorded      : yes
+               cashier blocked from trail : yes
+               actions are attributable to an operator, an IP and a timestamp
+
+   FIXED     V-20  Wholesale cost and margin are sent to every employee
+             OWASP A01:2021 | API3:2023 Broken Object Property Level Authorization | CWE-213
+             authenticated as a CASHIER (role=employee):
+               none of the 5 stock endpoints returned a cost or margin field
+             administrator still sees cost: yes (4 cost fields)
+               supplier pricing is no longer sent to staff who may not see it
+
+   FIXED     V-05b  Password guessing is not rate limited per account
+             OWASP A07:2021 | CWE-307 Improper Restriction of Excessive Authentication Attempts
+             20 consecutive failed logins for user "admin" from one IP
+               processed without throttling: 1
+               rejected with HTTP 429      : 19
+               first 429 on attempt #2
+
+========================================================================
+ SUMMARY
+========================================================================
+  Still exploitable : 0  
+  Fixed             : 14  V-01 V-02 V-03 V-04 V-05a V-05c V-06 V-07 V-08 V-09 V-10 V-11 V-20 V-05b
+========================================================================
+  target: http://127.0.0.1:8000/api
+  run at: 2026-09-21T07:10:01.787Z

@@ -1,0 +1,17 @@
+SE4030 Secure Software Development Assignment
+Group Number: 40
+
+Group Members
+-------------
+P.A.R.B. Subasingha
+IT22098450
+Role: Group Leader
+
+R.M.M.P. Bandara
+IT22249166
+
+R.H.F. Hamna
+IT22516916
+
+R.M.K.N. Gunasena
+IT22078582
